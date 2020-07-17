@@ -1,0 +1,98 @@
+El Examen tendrá una lista de preguntas a las cuales los alumnos podran responder individualmente,
+al terminar de responder la totalidad de las preguntas se dará como finalizado el examen.
+
+public class Examen
+{
+    String nombre;
+    List<Concreta> preguntas;
+}
+
+Habra una interfaz Pregunta, para que el sistema soporte los 3 tipos de preguntas.
+
+public interface Pregunta
+{
+    public void responder();
+    public boolean evaluar();
+}
+
+Los 3 tipos de preguntas serán:
+
+public class Concreta implements Pregunta
+{
+    String texto;
+    String respuesta;
+    String correcto;
+    TipoRespuesta tipoRespuesta=LIMITADA;
+    int pesoEspecifico;
+
+	public void responder(String respuesta){}	
+	public Int evaluar();
+}
+
+public class MultipleChoice implements Pregunta
+{
+    String texto = null;
+    List<String> posiblesRespuestas;
+    private TipoRespuesta tipoRespuesta=LIBRE;
+    int pesoEspecifico;
+	
+	public void responder(String respuesta){}	
+	public Int evaluar();
+}
+
+public class VerdaderoOFalso implements Pregunta
+{
+    String texto = null;
+    String respuesta=null;
+    VOF correcto;
+    private TipoRespuesta tipoRespuesta=BINARIA;
+    int pesoEspecifico;
+
+	public void responder(String respuesta){}	
+	public Int evaluar();
+}
+
+Cada pregunta como vemos cuenta con:
+- texto -> representa el interrogante.
+- respuesta -> Representa la respuesta dada por el alumno. A fines practicos las respuestas son string,
+		podran ser dadas en otro tipo pero se recibiran strings para
+- tipoRespuesta -> Representa que tipo de respuesta debe tener ese tipo de pregunta.
+- pesoEspecifico -> Represental el valor de la pregunta
+
+La nota del examen tendra distintas formas de evaluar, por lo que conviene saber si la pregunta es correcta,
+y el puntaje de la misma de forma separada. 
+
+public class Examen
+{
+    String nombre;
+    List<Pregunta> preguntas;
+    Int notaFinal;
+    FormaEvaluacion formaEvaluacion;
+
+	public void evaluar()
+	{
+		notaFinal=formaEvaluacion.evaluar(preguntas);
+	}
+		
+}
+
+public interface FormaEvaluacion
+{
+	public Int evaluar(List<Pregunta> preguntas);
+}
+
+public RestaFija implements FormaEvaluacion
+{	
+
+     Int numeroARestar;
+     Int sumaEspecificosCorrectos;
+
+	public Int evaluar(List<Pregunta> preguntas)
+	{
+		preguntas.forAll({p->sumaEspecificosCorrectos+=p.evaluar()});
+		(sumaEspecificosCorrectos-numeroARestar).min(1);
+	}
+}
+
+---------------
+
